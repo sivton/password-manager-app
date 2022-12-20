@@ -1,22 +1,37 @@
 from tkinter import *
+from tkinter import messagebox
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def saveData():
-    dataFile = open("data.txt", "a")
-    dataFile.write(f"{websiteEntry.get()} | {emailEntry.get()} | {passwordEntry.get()} \n")
-    dataFile.close()
-    websiteEntry.delete(0, END)
-    emailEntry.delete(0, END)
-    passwordEntry.delete(0, END)
+    website = websiteEntry.get()
+    email = emailEntry.get()
+    password = passwordEntry.get()
+        
+    if len(website)==0 or len(email)==0 or len(password)==0:
+        messagebox.showerror(title=website, message="Error! \nOne or more fields are empty!")
+
+    else:
+        isOk = messagebox.askokcancel(title=website, message=f"Details you have entered are: "
+                            f"\n\nWebsite: {website}" 
+                            f"\nEmail: {email}"
+                            f"\nPassword: {password}"
+                            f"\n\nIs this OK to save?")
+    
+        if isOk:
+            dataFile = open("data.txt", "a")
+            dataFile.write(f"{website} | {email} | {password} \n")
+            dataFile.close()
+            websiteEntry.delete(0, END)
+            passwordEntry.delete(0, END)
         
 
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
-window.title("Password Manager")
+window.title("MyPass - Password Manager")
 window.config(padx=100, pady=50)
 
 # Canvas
