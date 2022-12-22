@@ -4,6 +4,30 @@ from random import randint, choice, shuffle
 import pyperclip
 import json
 
+# ---------------------------- FIND PASSWORD ------------------------------- #
+
+
+def findPassword():
+    website = websiteEntry.get()
+    
+    try: 
+        with open("data.json", "r") as dataFile:
+            data = json.load(dataFile)      
+      
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No data file found!")
+        
+    else:
+        if website in data:
+                email = data[website]["email"]
+                password = data[website]["password"]
+                messagebox.showinfo(title=website, message=f"Your email and password for {website} is: \n\nEmail: {email} \nPassword: {password}")                    
+              
+        else:
+            messagebox.showinfo(title=website, message=f"No email/passwords stored for: \n\n{website}")  
+        
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 
@@ -80,7 +104,7 @@ def saveData():
 
 window = Tk()
 window.title("MyPass - Password Manager")
-window.config(padx=100, pady=50)
+window.config(padx=50, pady=50)
 
 # Canvas
 canvas = Canvas(height=200, width=200)
@@ -101,21 +125,23 @@ passwordLabel.grid(column=0, row=3)
 
 
 # Entries
-websiteEntry = Entry(width=35)
-websiteEntry.grid(column=1, row=1, columnspan=2)
+websiteEntry = Entry(width=21)
+websiteEntry.grid(column=1, row=1)
 websiteEntry.focus()
 
-emailEntry = Entry(width=35)
+emailEntry = Entry(width=38)
 emailEntry.grid(column=1, row=2, columnspan=2)
 emailEntry.insert(END, "@gmail.com")
 
-passwordEntry = Entry(width=19)
+passwordEntry = Entry(width=21)
 passwordEntry.grid(column=1, row=3)
 
 
 # Buttons
-generatePasswordBtn = Button(
-    text="Generate Password", command=generatePassword)
+searchBtn = Button(text="Search", width=13, command=findPassword)
+searchBtn.grid(column=2, row=1)
+
+generatePasswordBtn = Button(text="Generate Password", command=generatePassword)
 generatePasswordBtn.grid(column=2, row=3)
 
 addBtn = Button(text="Add", width=36, command=saveData)
