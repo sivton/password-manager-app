@@ -54,18 +54,26 @@ def saveData():
                                       f"\n\nIs this OK to save?")
 
         if isOk:
-            dataFile = open("data.json", "r")
-            # Reads old data
-            data = json.load(dataFile) 
-            # Adds newly entered data
-            data.update(enteredData)
+            try:
+                with open("data.json", "r") as dataFile:
+                    # Reads old data
+                    data = json.load(dataFile)
             
-            dataFile = open("data.json", "w")
-            # Writes newly entered data + old data to file
-            json.dump(data, dataFile, indent=4)
-            
-            websiteEntry.delete(0, END)
-            passwordEntry.delete(0, END)
+            except FileNotFoundError:
+                with open("data.json", "w") as dataFile:
+                    # Writes newly entered data + old data to file
+                    json.dump(enteredData, dataFile, indent=4)
+                    
+            else:
+                # Adds newly entered data
+                data.update(enteredData)
+                with open("data.json", "w") as dataFile:
+                    # Writes newly entered data + old data to file
+                    json.dump(data, dataFile, indent=4)
+
+            finally:
+                websiteEntry.delete(0, END)
+                passwordEntry.delete(0, END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
